@@ -5,6 +5,7 @@ export async function onRequestPost({ request, env }) {
   const data = await request.json()
   const { name, phone, email, message, activityId } = data
   console.log("请求数据", data)
+  console.log("环境变量", env.GOOGLE_PRIVATE_KEY)
   const jwtHeader = {
     alg: "RS256",
     typ: "JWT"
