@@ -39,7 +39,7 @@
         document.getElementById("result").innerText = "报名成功！"
         localStorage.setItem("joined_" + id, "1")
         form.reset()
-        window.location.href = `activity.html?id=${id}`;
+        window.location.replace = `activity.html?id=${id}`;
       } else {
         document.getElementById("result").innerText = "报名失败"
       }
