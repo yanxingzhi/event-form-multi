@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>报名表</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; max-width: 600px; margin: auto; }
+    input, textarea { width: 100%; margin-bottom: 1em; padding: 0.8em; font-size: 1em; }
+    button { padding: 1em 2em; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>报名表</h2>
+  <form id="signup-form">
+    <input type="hidden" name="activityId" id="activity-id">
+    <label>姓名：<input name="name" required></label>
+    <label>邮箱：<input name="email" type="email" required></label>
+    <label>电话：<input name="phone"></label>
+    <label>留言：<textarea name="message"></textarea></label>
+    <button type="submit">提交</button>
+  </form>
+  <p id="result"></p>
+  <script>
+    const id = new URLSearchParams(location.search).get("id")
+    document.getElementById("activity-id").value = id
+
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault()
+      const form = e.target
+      const data = Object.fromEntries(new FormData(form).entries())
+
+      const res = await fetch("/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+
+      if (res.ok) {
+        document.getElementById("result").innerText = "报名成功！"
+        localStorage.setItem("joined_" + id, "1")
+        form.reset()
+      } else {
+        document.getElementById("result").innerText = "报名失败"
+      }
+    })
+  </script>
+</body>
+</html>

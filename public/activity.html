@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>活动详情</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; max-width: 700px; margin: auto; text-align: center; }
+    img { max-width: 100%; border-radius: 12px; box-shadow: 0 0 10px #ccc; }
+    .btn { padding: 1em 2em; margin: 1em; border: none; border-radius: 8px; font-size: 1.2em; cursor: pointer; }
+    .primary { background: #2563eb; color: white; }
+    .gray { background: #e5e7eb; }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+
+  <script>
+    const params = new URLSearchParams(location.search)
+    const id = params.get("id")
+
+    fetch("/data/events.json")
+      .then(res => res.json())
+      .then(events => {
+        const evt = events.find(e => e.id === id)
+        if (!evt) {
+          document.getElementById("content").innerText = "活动未找到"
+          return
+        }
+        document.getElementById("content").innerHTML = `
+          <h1>${evt.title}</h1>
+          <img src="${evt.poster}" alt="活动海报">
+          <p style="text-align:left;margin-top:1em;">${evt.desc}</p>
+          <div id="status"></div>
+          <div id="buttons">
+            <button class="btn primary" onclick="goForm('${evt.id}')">我要参加</button>
+            <button class="btn gray" onclick="alert('好的，您可随时重试')">考虑一下</button>
+          </div>
+        `
+        const joined = localStorage.getItem("joined_" + id)
+        if (joined) {
+          document.getElementById("status").innerHTML = "<p>✅ 您已经报名成功。</p>"
+          document.getElementById("buttons").style.display = "none"
+        }
+      })
+
+    function goForm(id) {
+      window.location.href = "/form.html?id=" + id
+    }
+  </script>
+</body>
+</html>

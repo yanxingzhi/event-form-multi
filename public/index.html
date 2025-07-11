@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>活动列表</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; max-width: 900px; margin: auto; }
+    .event-card { border: 1px solid #ccc; border-radius: 12px; margin: 1em 0; padding: 1em; display: flex; gap: 1em; }
+    .event-card img { width: 160px; border-radius: 8px; }
+    .event-info { flex: 1; }
+    .event-info h3 { margin: 0.2em 0; }
+    button { background: #2563eb; color: white; padding: 0.6em 1em; border: none; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>当前可报名的活动</h1>
+  <div id="event-list"></div>
+
+  <script>
+    fetch("/data/events.json")
+      .then(res => res.json())
+      .then(events => {
+        const list = document.getElementById("event-list")
+        events.forEach(evt => {
+          const el = document.createElement("div")
+          el.className = "event-card"
+          el.innerHTML = `
+            <img src="${evt.poster}" alt="poster">
+            <div class="event-info">
+              <h3>${evt.title}</h3>
+              <p>${evt.desc}</p>
+              <button onclick="location.href='/activity.html?id=${evt.id}'">查看活动</button>
+            </div>
+          `
+          list.appendChild(el)
+        })
+      })
+  </script>
+</body>
+</html>
