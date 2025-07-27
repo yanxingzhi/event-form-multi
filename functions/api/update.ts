@@ -109,6 +109,8 @@ export async function onRequestPost({ request, env }) {
           status: 500,
           headers: { "Content-Type": "application/json" },
         })
+      } else {
+        sendToLine({userId: a, text: 'お申し込みはキャンセルされました。'})
       }
   
       return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
@@ -135,3 +137,32 @@ export async function onRequestPost({ request, env }) {
     return bytes.buffer
   }
   
+
+  
+  async function sendToLine({userId, text}) {
+    const LINE_CHANNEL_ACCESS_TOKEN = "RSrukCgPiNBsVcRUBAKraUn/2g8sY9csIuNSnNGKtQ6DBk4kPnaulYvJaUoNiMaxY92sbWi3Nf0fLh8EO82wfsdzGSOTL+OTgO/p/hrLGSgw0KSzoKVqLLlgflBBCmheWme6SHkj01fsEfDSQj/QJgdB04t89/1O/w1cDnyilFU=";
+    const TARGET_USER_ID = userId;
+    const response = await fetch("https://api.line.me/v2/bot/message/push", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`
+      },
+      body: JSON.stringify({
+        to: TARGET_USER_ID,
+        messages: [
+          {
+            type: "text",
+            text: text
+          }
+        ]
+      })
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("发送消息失败:", errorText);
+    }
+  
+    console.log("消息发送成功");
+  }

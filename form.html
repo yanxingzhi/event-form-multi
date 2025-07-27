@@ -107,22 +107,26 @@
       });
 
       if (res.ok) {
-        document.getElementById("result").innerText = "报名成功！";
+        document.body.innerHTML = `
+            <div id="content">すでに申し込みを済ませております。</div>
+            <button id="cancelBtn">申し込みをキャンセル</button>
+          `
+          document.getElementById("cancelBtn").addEventListener("click", async function () {
+              const res = await fetch("/api/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({"a": id,"e": userProfile.userId})
+              });
 
-        try {
-          await liff.sendMessages([
-            {
-              type: "text",
-              text: `您好 ${userProfile.displayName}，您的报名已成功！`
-            }
-          ]);
-        } catch (e) {
-          console.warn("消息发送失败：", e);
-        }
-
-        setTimeout(() => liff.closeWindow(), 1500);
+              if (res.ok) {
+                clear();
+                document.body.innerHTML = `
+                  <div id="content">お申し込みはキャンセルされました。</div>
+                `
+              }
+          })
       } else {
-        document.getElementById("result").innerText = "报名失败，请稍后再试。";
+        alert("ネットワークが混み合っています。")
       }
     });
     }
