@@ -8,6 +8,24 @@
     input, textarea { width: 100%; margin-bottom: 1em; padding: 0.8em; font-size: 1em; }
     button { padding: 1em 2em; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; }
   </style>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    liff.init({ liffId: "你的 LIFF ID" })
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            liff.login(); // 如果未登录，则引导登录
+          } else {
+            liff.getProfile().then(profile => {
+              console.log("用户 LINE ID:", profile.userId);
+              console.log("用户名:", profile.displayName);
+              // 可将 userId 提交给后端或用于识别身份
+            });
+          }
+  })
+  .catch(err => {
+    console.error('LIFF 初始化失败:', err);
+  });
+  </script>
 </head>
 <body>
   <h2>报名表</h2>
