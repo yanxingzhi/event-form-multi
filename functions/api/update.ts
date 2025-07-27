@@ -4,6 +4,7 @@ export async function onRequestPost({ request, env }) {
     try {
       const data = await request.json()
       const { a, e } = data
+      const userId = a;
   
       if (!a || !e) {
         return new Response(JSON.stringify({ success: false, error: "缺少参数 a 或 e" }), {
@@ -103,7 +104,6 @@ export async function onRequestPost({ request, env }) {
         }
       )
   
-      const pushText = {userId: a, text: 'お申し込みはキャンセルされました。'};
       if (!deleteRes.ok) {
         const errorText = await deleteRes.text()
         return new Response(JSON.stringify({ success: false, error: errorText }), {
@@ -112,7 +112,7 @@ export async function onRequestPost({ request, env }) {
         })
       } 
 
-      await sendToLine(pushText)
+      await sendToLine({userId, text: 'お申し込みはキャンセルされました。'})
       return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
         headers: { "Content-Type": "application/json" },
       })
