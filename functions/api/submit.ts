@@ -70,7 +70,9 @@ export async function onRequestPost({ request, env }) {
     )
   
     if (sheetRes.ok) {
-      await sendToLine({userId, text:'すでに申し込みを済ませております。'})
+      const events = await fetch("https://event-form-multi.pages.dev/data/events.json")
+      const eventsJson = await events.json()
+      await sendToLine({userId, text: `${eventsJson.find(e => e.id == activityId).title}、すでに申し込みを済ませております。`})
       return new Response("OK")
     } else {
       const errorText = await sheetRes.text()

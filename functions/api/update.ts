@@ -112,7 +112,9 @@ export async function onRequestPost({ request, env }) {
         })
       } 
 
-      await sendToLine({userId, text: 'お申し込みはキャンセルされました。'})
+      const events = await fetch("https://event-form-multi.pages.dev/data/events.json")
+      const eventsJson = await events.json()
+      await sendToLine({userId, text: `${eventsJson.find(e => e.id == a).title}、お申し込みはキャンセルされました。`})
       return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
         headers: { "Content-Type": "application/json" },
       })
