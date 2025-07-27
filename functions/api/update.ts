@@ -110,11 +110,10 @@ export async function onRequestPost({ request, env }) {
           status: 500,
           headers: { "Content-Type": "application/json" },
         })
-      } else {
-        await sendToLine(pushText)
-      }
-  
-      return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex, pushText }), {
+      } 
+
+      await sendToLine(pushText)
+      return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
         headers: { "Content-Type": "application/json" },
       })
     } catch (error) {
