@@ -110,7 +110,7 @@ export async function onRequestPost({ request, env }) {
           headers: { "Content-Type": "application/json" },
         })
       } else {
-        sendToLine({userId: a, text: 'お申し込みはキャンセルされました。'})
+        await sendToLine({userId: a, text: 'お申し込みはキャンセルされました。'})
       }
   
       return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
