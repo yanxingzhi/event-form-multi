@@ -23,6 +23,7 @@
   <p id="result"></p>
 
   <script>
+    // =========== line ===========
     const liffId = "2007823026-yDgLXZ6k"; // 替换为你的实际 LIFF ID
     let userProfile = null;
 
@@ -42,18 +43,50 @@
 
     initLIFF();
 
-    // 获取 cookie 中指定 key 的值
-    function getCookieValue(name) {
-      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-      return match ? decodeURIComponent(match[2]) : null;
-    }
-    // 获取 userId，如果为空就跳转到登录页（首页）
-    const userId = getCookieValue('userId');
-
     const id = new URLSearchParams(location.search).get("id");
     document.getElementById("activity-id").value = id;
 
-    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+    function clear() {
+      history.pushState(null, null, location.href);
+      window.addEventListener("popstate", function (event) {
+        history.pushState(null, null, location.href);
+      });
+    }
+
+    // ===========查询是否已报名===========
+    const res = await fetch(`/api/query?a=${id}&e=${userProfile.userId}`, {
+        method: "GET",
+    });
+
+    if (res.ok) {
+      if (res.found) {
+        document.body.innerHTML = `
+          <div id="content">すでに申し込みを済ませております。</div>
+          <button id="cancelBtn">申し込みをキャンセル</button>
+        `
+        document.getElementById("cancelBtn").addEventListener("click", async function () {
+            const res = await fetch("/api/update", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({"a": id,"e": userProfile.userId})
+            });
+
+            if (res.ok) {
+              clear();
+              document.body.innerHTML = `
+                <div id="content">お申し込みはキャンセルされました。</div>
+              `
+            }
+        })
+      } else {
+        alert("ネットワークが混み合っています。")
+      }
+    }
+
+    // ===========表单提交===========
+    const form = document.getElementById("signup-form")
+    if (form) {
+      form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const form = e.target;
       const data = Object.fromEntries(new FormData(form).entries());
@@ -89,6 +122,7 @@
         document.getElementById("result").innerText = "报名失败，请稍后再试。";
       }
     });
+    }
   </script>
 </body>
 </html>
