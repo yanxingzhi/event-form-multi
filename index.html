@@ -17,6 +17,25 @@
   <div id="event-list"></div>
 
   <script>
+    const liffId = "2007823026-yDgLXZ6k"; // 替换为你的实际 LIFF ID
+    let userProfile = null;
+
+    async function initLIFF() {
+      try {
+        await liff.init({ liffId });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        userProfile = await liff.getProfile();
+        console.log("LINE 用户 ID:", userProfile.userId);
+      } catch (err) {
+        console.error("LIFF 初始化失败:", err);
+      }
+    }
+
+    initLIFF();
+    
     fetch("/data/events.json")
       .then(res => res.json())
       .then(events => {
