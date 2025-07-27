@@ -103,6 +103,7 @@ export async function onRequestPost({ request, env }) {
         }
       )
   
+      const pushText = {userId: a, text: 'お申し込みはキャンセルされました。'};
       if (!deleteRes.ok) {
         const errorText = await deleteRes.text()
         return new Response(JSON.stringify({ success: false, error: errorText }), {
@@ -110,10 +111,10 @@ export async function onRequestPost({ request, env }) {
           headers: { "Content-Type": "application/json" },
         })
       } else {
-        await sendToLine({userId: a, text: 'お申し込みはキャンセルされました。'})
+        await sendToLine(pushText)
       }
   
-      return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
+      return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex, pushText }), {
         headers: { "Content-Type": "application/json" },
       })
     } catch (error) {
