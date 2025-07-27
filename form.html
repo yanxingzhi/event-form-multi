@@ -6,26 +6,9 @@
   <style>
     body { font-family: sans-serif; padding: 2em; max-width: 600px; margin: auto; }
     input, textarea { width: 100%; margin-bottom: 1em; padding: 0.8em; font-size: 1em; }
-    button { padding: 1em 2em; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    button { padding: 1em 2em; background: #06c755; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; }
   </style>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script>
-    liff.init({ liffId: "你的 LIFF ID" })
-        .then(() => {
-          if (!liff.isLoggedIn()) {
-            liff.login(); // 如果未登录，则引导登录
-          } else {
-            liff.getProfile().then(profile => {
-              console.log("用户 LINE ID:", profile.userId);
-              console.log("用户名:", profile.displayName);
-              // 可将 userId 提交给后端或用于识别身份
-            });
-          }
-  })
-  .catch(err => {
-    console.error('LIFF 初始化失败:', err);
-  });
-  </script>
 </head>
 <body>
   <h2>报名表</h2>
@@ -38,30 +21,66 @@
     <button type="submit">提交</button>
   </form>
   <p id="result"></p>
+
   <script>
-    const id = new URLSearchParams(location.search).get("id")
-    document.getElementById("activity-id").value = id
+    const liffId = "你的 LIFF ID"; // 替换为你的实际 LIFF ID
+    let userProfile = null;
+
+    async function initLIFF() {
+      try {
+        await liff.init({ liffId });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+        userProfile = await liff.getProfile();
+        console.log("LINE 用户 ID:", userProfile.userId);
+      } catch (err) {
+        console.error("LIFF 初始化失败:", err);
+      }
+    }
+
+    initLIFF();
+
+    const id = new URLSearchParams(location.search).get("id");
+    document.getElementById("activity-id").value = id;
 
     document.getElementById("signup-form").addEventListener("submit", async (e) => {
-      e.preventDefault()
-      const form = e.target
-      const data = Object.fromEntries(new FormData(form).entries())
+      e.preventDefault();
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      if (userProfile) {
+        data.lineId = userProfile.userId;
+        data.lineName = userProfile.displayName;
+      }
 
       const res = await fetch("/api/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
-      })
+      });
 
       if (res.ok) {
-        document.getElementById("result").innerText = "报名成功！"
-        localStorage.setItem("joined_" + id, "1")
-        form.reset()
-        window.location.replace = `activity.html?id=${id}`;
+        document.getElementById("result").innerText = "报名成功！";
+        localStorage.setItem("joined_" + id, "1");
+
+        try {
+          await liff.sendMessages([
+            {
+              type: "text",
+              text: `您好 ${userProfile.displayName}，您的报名已成功！`
+            }
+          ]);
+        } catch (e) {
+          console.warn("消息发送失败：", e);
+        }
+
+        setTimeout(() => liff.closeWindow(), 1500);
       } else {
-        document.getElementById("result").innerText = "报名失败"
+        document.getElementById("result").innerText = "报名失败，请稍后再试。";
       }
-    })
+    });
   </script>
 </body>
 </html>
