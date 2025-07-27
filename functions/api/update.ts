@@ -4,7 +4,7 @@ export async function onRequestPost({ request, env }) {
     try {
       const data = await request.json()
       const { a, e } = data
-      const userId = a;
+      const userId = e;
   
       if (!a || !e) {
         return new Response(JSON.stringify({ success: false, error: "缺少参数 a 或 e" }), {
