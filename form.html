@@ -52,7 +52,8 @@
       });
 
       if (res.ok) {
-        if (res.found) {
+        const resJson = await res.json();
+        if (resJson.found) {
           document.body.innerHTML = `
             <div id="content">すでに申し込みを済ませております。</div>
             <button id="cancelBtn">申し込みをキャンセル</button>
@@ -107,7 +108,6 @@
 
       if (res.ok) {
         document.getElementById("result").innerText = "报名成功！";
-        localStorage.setItem("joined_" + id, "1");
 
         try {
           await liff.sendMessages([
