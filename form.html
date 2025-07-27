@@ -96,7 +96,7 @@
       const data = Object.fromEntries(new FormData(form).entries());
 
       if (userProfile) {
-        data.lineId = userProfile.userId;
+        data.userId = userProfile.userId;
         data.lineName = userProfile.displayName;
       }
 
