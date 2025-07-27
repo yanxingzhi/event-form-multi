@@ -36,11 +36,6 @@
             <button class="btn gray" onclick="alert('好的，您可随时重试')">考虑一下</button>
           </div>
         `
-        const joined = localStorage.getItem("joined_" + id)
-        if (joined) {
-          document.getElementById("status").innerHTML = "<p>✅ 您已经报名成功。</p>"
-          document.getElementById("buttons").style.display = "none"
-        }
       })
 
     function goForm(id) {

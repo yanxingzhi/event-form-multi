@@ -54,7 +54,7 @@
     }
 
     // ===========查询是否已报名===========
-    const res = await fetch(`/api/query?a=${id}&e=${userProfile.userId}`, {
+    const res = fetch(`/api/query?a=${id}&e=${userProfile.userId}`, {
         method: "GET",
     });
 
