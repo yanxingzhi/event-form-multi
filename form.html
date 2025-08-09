@@ -84,7 +84,7 @@
             <div id="content">すでに申し込みを済ませております。</div>
             <button id="cancelBtn">申し込みをキャンセル</button>
           `
-          document.getElementById("cancelBtn").addEventListener("click", withLoading(async function () {
+          document.getElementById("cancelBtn").addEventListener("click", withLoading(async () => {
               const res = await fetch("/api/update", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
