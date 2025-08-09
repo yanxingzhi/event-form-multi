@@ -39,6 +39,8 @@
   <script>
     // =========== line ===========
     const liffId = "2007823026-yDgLXZ6k"; // 替换为你的实际 LIFF ID
+    const id = new URLSearchParams(location.search).get("id");
+    document.getElementById("activity-id").value = id;
     let userProfile = null;
 
     async function initLIFF() {
@@ -103,6 +105,10 @@
           const option = document.createElement('option');
           option.value = event.id;      // 用事件id做value
           option.textContent = event.title; // 显示事件标题
+
+          if (id == event.id) {
+            option.selected = true;
+          }
           select.appendChild(option);
         });
       } catch (error) {
