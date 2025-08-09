@@ -152,8 +152,10 @@
       });
     }
 
-    withLoading(stateQuery)();
-    withLoading(loadEvents)();
+    (async () => {
+      await withLoading(loadEvents)();
+      await withLoading(stateQuery)();
+    })();
     
     function withLoading(asyncFunc) {
       return async function(...args) {
