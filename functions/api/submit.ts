@@ -79,7 +79,6 @@ export async function onRequestPost({ request, env }) {
         },
         body: JSON.stringify({
           values: [[activityId, userId, 
-            eventName,
             name,
             sex,
             nationality,
