@@ -59,7 +59,7 @@ export async function onRequestPost({ request, env }) {
   
       // 3. 获取表格数据
       const readRes = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${env.SHEET_ID}/values/A:E`,
+        `https://sheets.googleapis.com/v4/spreadsheets/${env.SHEET_ID}/values/A:B`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -71,7 +71,7 @@ export async function onRequestPost({ request, env }) {
       const rows = readJson.values || []
   
       // 4. 找到目标行的 index
-      const rowIndex = rows.findIndex(row => row[0] === a && row[4] === e)
+      const rowIndex = rows.findIndex(row => row[0] === a && row[1] === e)
       if (rowIndex === -1) {
         return new Response(JSON.stringify({ success: false, error: "未找到匹配行" }), {
           headers: { "Content-Type": "application/json" },

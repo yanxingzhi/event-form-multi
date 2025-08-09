@@ -59,7 +59,7 @@ export async function onRequestGet({ request, env }) {
   
       // 3. 从 Google Sheets 读取数据
       const readRes = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${env.SHEET_ID}/values/A:E`,
+        `https://sheets.googleapis.com/v4/spreadsheets/${env.SHEET_ID}/values/A:B`,
         {
           method: "GET",
           headers: {
@@ -72,7 +72,7 @@ export async function onRequestGet({ request, env }) {
       const rows = readJson.values || []
   
       // 4. 查找符合条件的数据
-      const found = rows.find((row) => row[0] === a && row[4] === e)
+      const found = rows.find((row) => row[0] === a && row[1] === e)
   
       return new Response(
         JSON.stringify({
