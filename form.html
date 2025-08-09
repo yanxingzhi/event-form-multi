@@ -81,6 +81,18 @@
         const resJson = await res.json();
         if (resJson.found) {
           document.body.innerHTML = `
+            <div id="loadingMask" style="
+            display:none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5em;
+          ">読み込み中...</div>
             <div id="content">すでに申し込みを済ませております。</div>
             <button id="cancelBtn">申し込みをキャンセル</button>
           `
