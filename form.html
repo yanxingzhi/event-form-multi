@@ -154,7 +154,7 @@
     
     function withLoading(asyncFunc) {
       return async function(...args) {
-        const mask = document.getElementById("loadingMask");
+        let mask = document.getElementById("loadingMask");
         if (!mask) {
       // 创建遮罩元素
       mask = document.createElement("div");
