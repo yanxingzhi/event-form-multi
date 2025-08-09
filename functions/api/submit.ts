@@ -3,7 +3,6 @@
 export async function onRequestPost({ request, env }) {
     try {
     const {
-      eventName,
       name,
       sex,
       nationality,
