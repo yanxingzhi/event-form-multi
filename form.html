@@ -14,13 +14,9 @@
   <h2>报名表</h2>
   <form id="signup-form">
     <label>イベント名：
-      <select name="activityId" required>
-        <option value="">--</option>
-        <option value="Male">男性</option>
-        <option value="Female">女性</option>
+      <select id="activityIdSelect" name="activityId" required>
       </select>
     </label>
-    <input type="hidden" name="activityId" id="activity-id"/>
     <label>お名前：<input name="name" required/></label>
     <label>性別：
       <select name="sex" required>
@@ -102,11 +98,12 @@
         const events = await response.json();
         console.log('事件数据', events);
 
-        const ul = document.getElementById('eventList');
+        const select = document.getElementById('activityIdSelect');
         events.forEach(event => {
-          const li = document.createElement('li');
-          li.textContent = `${event.title} - ${event.desc}`;
-          ul.appendChild(li);
+          const option = document.createElement('option');
+          option.value = event.id;      // 用事件id做value
+          option.textContent = event.title; // 显示事件标题
+          select.appendChild(option);
         });
       } catch (error) {
         console.error('加载事件数据失败:', error);
@@ -129,6 +126,9 @@
     if (form) {
       form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!confirm("確認しますか？")) {
+        return;
+      }
       const form = e.target;
       const data = Object.fromEntries(new FormData(form).entries());
 
