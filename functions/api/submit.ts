@@ -14,7 +14,7 @@ export async function onRequestPost({ request, env }) {
       activityId,
       userId
     } = await request.json();
-    if (!eventName || !name || !sex || !nationality || !phone || !email) {
+    if (!activityId || !name || !sex || !nationality || !phone || !email) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
