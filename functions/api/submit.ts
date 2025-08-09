@@ -2,8 +2,22 @@
 
 export async function onRequestPost({ request, env }) {
     try {
-    const data = await request.json()
-    const { name, phone, email, message, activityId, userId } = data
+    const {
+      eventName,
+      name,
+      sex,
+      nationality,
+      phone,
+      email,
+      school,
+      message,
+      activityId,
+      userId
+    } = await request.json();
+    if (!eventName || !name || !sex || !nationality || !phone || !email) {
+      return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
+    }
+
     const jwtHeader = {
       alg: "RS256",
       typ: "JWT"
@@ -64,7 +78,15 @@ export async function onRequestPost({ request, env }) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          values: [[activityId, name, phone, email, userId]]
+          values: [[activityId, userId, 
+            eventName,
+            name,
+            sex,
+            nationality,
+            phone,
+            email,
+            school,
+            message,]]
         })
       }
     )

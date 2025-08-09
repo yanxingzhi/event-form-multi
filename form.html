@@ -1,135 +1,137 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>报名表</title>
-  <style>
-    body { font-family: sans-serif; padding: 2em; max-width: 600px; margin: auto; }
-    input, textarea { width: 100%; margin-bottom: 1em; padding: 0.8em; font-size: 1em; }
-    button { padding: 1em 2em; background: #06c755; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; }
-  </style>
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<meta charset="UTF-8">
+<title>活動报名系统 | Event Registration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: sans-serif; max-width: 600px; margin: auto; }
+  label { display: block; margin-top: 12px; }
+  select, input, textarea { width: 100%; padding: 8px; margin-top: 4px; }
+  button { margin-top: 16px; padding: 10px; }
+  .lang-switch { margin-bottom: 20px; }
+</style>
 </head>
 <body>
-  <h2>报名表</h2>
-  <form id="signup-form">
-    <input type="hidden" name="activityId" id="activity-id">
-    <label>姓名：<input name="name" required></label>
-    <label>邮箱：<input name="email" type="email" required></label>
-    <label>电话：<input name="phone"></label>
-    <label>留言：<textarea name="message"></textarea></label>
-    <button type="submit">提交</button>
-  </form>
-  <p id="result"></p>
 
-  <script>
-    // =========== line ===========
-    const liffId = "2007823026-yDgLXZ6k"; // 替换为你的实际 LIFF ID
-    const id = new URLSearchParams(location.search).get("id");
-    document.getElementById("activity-id").value = id;
-    let userProfile = null;
+<div class="lang-switch">
+  <label for="langSelect">🌐 Language / 言語 / 语言:</label>
+  <select id="langSelect">
+    <option value="ja">日本語</option>
+    <option value="en">English</option>
+    <option value="zh">中文</option>
+  </select>
+</div>
 
-    async function initLIFF() {
-      try {
-        await liff.init({ liffId });
-        if (!liff.isLoggedIn()) {
-          liff.login();
-          return;
-        }
-        userProfile = await liff.getProfile();
-        console.log("LINE 用户 ID:", userProfile.userId);
-      } catch (err) {
-        console.error("LIFF 初始化失败:", err);
-      }
+<form id="eventForm">
+  <label data-i18n="eventName">イベント名 / Event Name / 活动名称</label>
+  <input type="text" name="eventName" required>
+
+  <label data-i18n="name">お名前 / Name / 姓名</label>
+  <input type="text" name="name" required>
+
+  <label data-i18n="sex">性別 / Sex / 性别</label>
+  <select name="sex" required>
+    <option value="">--</option>
+    <option value="Male" data-i18n="male">男性 / Male / 男</option>
+    <option value="Female" data-i18n="female">女性 / Female / 女</option>
+  </select>
+
+  <label data-i18n="nationality">国籍 / Nationality / 国籍</label>
+  <input type="text" name="nationality" required>
+
+  <label data-i18n="phone">電話番号 / Phone Number / 电话</label>
+  <input type="tel" name="phone" required>
+
+  <label data-i18n="email">メールアドレス / Email Address / 邮箱</label>
+  <input type="email" name="email" required>
+
+  <label data-i18n="school">学校名又は勤務先 / School or Workplace / 学校或单位</label>
+  <input type="text" name="school">
+
+  <label data-i18n="message">質問 / Message / 留言</label>
+  <textarea name="message"></textarea>
+
+  <input type="hidden" name="activityId" value="">
+
+  <button type="submit" data-i18n="submit">送信 / Submit / 提交</button>
+</form>
+
+<script>
+const translations = {
+  ja: {
+    eventName: "イベント名",
+    name: "お名前",
+    sex: "性別",
+    male: "男性",
+    female: "女性",
+    nationality: "国籍",
+    phone: "電話番号",
+    email: "メールアドレス",
+    school: "学校名又は勤務先",
+    message: "質問",
+    submit: "送信"
+  },
+  en: {
+    eventName: "Event Name",
+    name: "Name",
+    sex: "Sex",
+    male: "Male",
+    female: "Female",
+    nationality: "Nationality",
+    phone: "Phone Number",
+    email: "Email Address",
+    school: "School or Workplace",
+    message: "Message or Question",
+    submit: "Submit"
+  },
+  zh: {
+    eventName: "活动名称",
+    name: "姓名",
+    sex: "性别",
+    male: "男",
+    female: "女",
+    nationality: "国籍",
+    phone: "电话",
+    email: "邮箱",
+    school: "学校或单位",
+    message: "留言",
+    submit: "提交"
+  }
+};
+
+document.getElementById('langSelect').addEventListener('change', function() {
+  const lang = this.value;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+      el.textContent = translations[lang][key];
     }
+  });
+});
 
-    async function stateQuery() {
-      await initLIFF()
+document.getElementById('eventForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!confirm("Are you sure you want to submit? / 確認しますか？ / 确认提交吗？")) {
+    return;
+  }
 
-      // ===========查询是否已报名===========
-      const res = await fetch(`/api/query?a=${id}&e=${userProfile.userId}`, {
-        method: "GET",
-      });
+  const formData = Object.fromEntries(new FormData(e.target).entries());
 
-      if (res.ok) {
-        const resJson = await res.json();
-        if (resJson.found) {
-          document.body.innerHTML = `
-            <div id="content">すでに申し込みを済ませております。</div>
-            <button id="cancelBtn">申し込みをキャンセル</button>
-          `
-          document.getElementById("cancelBtn").addEventListener("click", async function () {
-              const res = await fetch("/api/update", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({"a": id,"e": userProfile.userId})
-              });
+  const res = await fetch('/api/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+  });
 
-              if (res.ok) {
-                clear();
-                document.body.innerHTML = `
-                  <div id="content">お申し込みはキャンセルされました。</div>
-                `
-              }
-          })
-        } 
-      } else {
-        alert("ネットワークが混み合っています。")
-      }
-    }
+  if (res.ok) {
+    alert('Success! / 成功しました！ / 提交成功！');
+    e.target.reset();
+  } else {
+    alert('Error! / エラーが発生しました / 提交失败！');
+  }
+});
+</script>
 
-    function clear() {
-      history.pushState(null, null, location.href);
-      window.addEventListener("popstate", function (event) {
-        history.pushState(null, null, location.href);
-      });
-    }
-
-    stateQuery();
-    
-    // ===========表单提交===========
-    const form = document.getElementById("signup-form")
-    if (form) {
-      form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const data = Object.fromEntries(new FormData(form).entries());
-
-      if (userProfile) {
-        data.userId = userProfile.userId;
-        data.lineName = userProfile.displayName;
-      }
-
-      const res = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (res.ok) {
-        document.body.innerHTML = `
-            <div id="content">すでに申し込みを済ませております。</div>
-            <button id="cancelBtn">申し込みをキャンセル</button>
-          `
-          document.getElementById("cancelBtn").addEventListener("click", async function () {
-              const res = await fetch("/api/update", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({"a": id,"e": userProfile.userId})
-              });
-
-              if (res.ok) {
-                clear();
-                document.body.innerHTML = `
-                  <div id="content">お申し込みはキャンセルされました。</div>
-                `
-              }
-          })
-      } else {
-        alert("ネットワークが混み合っています。")
-      }
-    });
-    }
-  </script>
 </body>
 </html>
