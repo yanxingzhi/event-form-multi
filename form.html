@@ -11,6 +11,19 @@
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
+  <div id="loadingMask" style="
+  display:none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5em;
+">読み込み中...</div>
+
   <h2>报名表</h2>
   <form id="signup-form">
     <label>イベント名：
@@ -71,7 +84,7 @@
             <div id="content">すでに申し込みを済ませております。</div>
             <button id="cancelBtn">申し込みをキャンセル</button>
           `
-          document.getElementById("cancelBtn").addEventListener("click", async function () {
+          document.getElementById("cancelBtn").addEventListener("click", withLoading(async function () {
               const res = await fetch("/api/update", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -84,7 +97,7 @@
                   <div id="content">お申し込みはキャンセルされました。</div>
                 `
               }
-          })
+          }))
         } 
       } else {
         alert("ネットワークが混み合っています。")
@@ -92,6 +105,7 @@
     }
 
     async function loadEvents() {
+      const select = document.getElementById('activityIdSelect')
       select.addEventListener('change', () => {
       const val = select.value;
       if (val) {
@@ -135,14 +149,26 @@
       });
     }
 
-    stateQuery();
-
-    loadEvents();
+    withLoading(stateQuery)();
+    withLoading(loadEvents)();
     
+    function withLoading(asyncFunc) {
+      return async function(...args) {
+        const mask = document.getElementById("loadingMask");
+        try {
+          mask.style.display = "flex";
+          return await asyncFunc(...args);
+        } finally {
+          mask.style.display = "none";
+        }
+      }
+    }
+
+
     // ===========表单提交===========
     const form = document.getElementById("signup-form")
     if (form) {
-      form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", withLoading(async (e) => {
       e.preventDefault();
       if (!confirm("確認しますか？")) {
         return;
@@ -183,7 +209,7 @@
       } else {
         alert("ネットワークが混み合っています。")
       }
-    });
+    }));
     }
   </script>
 </body>
