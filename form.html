@@ -14,7 +14,7 @@
   <h2>报名表</h2>
   <form id="signup-form">
     <label>イベント名：
-      <select id="activityIdSelect" name="activityId" required disabled>
+      <select id="activityIdSelect" name="activityId" required>
       </select>
     </label>
     <br/>
@@ -92,6 +92,19 @@
     }
 
     async function loadEvents() {
+      select.addEventListener('change', () => {
+      const val = select.value;
+      if (val) {
+          // 当前基础 URL（不含参数和 hash）
+          const baseUrl = window.location.origin + window.location.pathname;
+
+          // 拼接参数，比如 ?eventId=xxx
+          const newUrl = `${baseUrl}?id=${encodeURIComponent(val)}`;
+
+          // 跳转
+          window.location.href = newUrl;
+        }
+      });
       try {
         const response = await fetch('./data/events.json');
         if (!response.ok) throw new Error('网络响应错误');
