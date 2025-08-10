@@ -8,7 +8,7 @@
     padding: 0;
     width: 100%;
     height: 100%;
-    font-size: 16px; /* 字体放大 */
+    font-size: 18px; /* 字体放大 */
     background: #f2f2f7;
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #1c1c1e;
@@ -39,6 +39,7 @@
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.2s ease-in-out;
+    width: 100%;
   }
   
   .event-card:hover {
@@ -78,8 +79,8 @@
     background-color: #007aff;
     border: none;
     color: white;
-    padding: 0.75em 1.2em;
-    font-size: 1.1rem;
+    padding: 0.85em 1.4em;
+    font-size: 1.3rem;
     font-weight: 600;
     border-radius: 12px;
     cursor: pointer;
@@ -157,13 +158,13 @@
     flex-direction: column;
     font-weight: 600;
     color: #333;
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
   
   input, select, textarea {
     margin-top: 0.3rem;
-    padding: 0.6em 0.8em;
-    font-size: 1rem;
+    padding: 0.75em 1em;
+    font-size: 1.1rem;
     border: 1.5px solid #ccc;
     border-radius: 10px;
     font-family: inherit;
@@ -185,8 +186,8 @@
     align-self: stretch;
     margin-top: 1rem;
     background-color: #007aff;
-    padding: 1em 0;
-    font-size: 1.2rem;
+    padding: 1.3em 0;
+    font-size: 1.4rem;
     font-weight: 700;
     border-radius: 15px;
   }
@@ -206,10 +207,16 @@
   }
   
   /* 响应式调整 */
-  /* 移动端一列显示卡片，按钮更大 */
+  /* 移动端强制单列卡片，用 block + margin 分隔，避免 grid 影响 */
   @media screen and (max-width: 600px) {
     #event-list {
-      grid-template-columns: 1fr !important;  /* 强制1列 */
+      display: block !important;
+      margin-top: 0;
+    }
+  
+    .event-card {
+      width: 100% !important;
+      margin-bottom: 1rem;
     }
   
     #buttons {
@@ -223,8 +230,8 @@
   
     /* 按钮更大易点 */
     button, button[type="submit"] {
-      font-size: 1.4rem;
-      padding: 1.3em 0;
+      font-size: 1.6rem;
+      padding: 1.5em 0;
       border-radius: 20px;
     }
   }
