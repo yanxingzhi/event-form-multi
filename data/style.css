@@ -1,0 +1,182 @@
+/* ===== 全局基础样式 ===== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 2em;
+    max-width: 1100px;
+    margin: auto;
+    background-color: #f9fafb;
+    color: #1f2937;
+    line-height: 1.6;
+  }
+  
+  h1, h2 {
+    text-align: center;
+    color: #111827;
+    margin-bottom: 1em;
+  }
+  
+  p {
+    color: #374151;
+  }
+  
+  /* ===== 卡片样式（活动列表用） ===== */
+  .event-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1em;
+    margin: 1em 0;
+    display: flex;
+    gap: 1em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  .event-card img {
+    width: 160px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .event-info h3 {
+    font-size: 1.2rem;
+    margin: 0.2em 0;
+    color: #111827;
+  }
+  
+  .event-info p {
+    font-size: 0.95rem;
+    color: #4b5563;
+  }
+  
+  /* ===== 表单样式（报名表用） ===== */
+  form {
+    background: #fff;
+    padding: 1.5em;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  
+  label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5em;
+  }
+  
+  input, textarea, select {
+    width: 100%;
+    margin-bottom: 1em;
+    padding: 0.8em;
+    font-size: 1em;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+  }
+  
+  /* ===== 按钮通用样式 ===== */
+  button, .btn {
+    display: inline-block;
+    padding: 0.8em 1.6em;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:hover, .btn:hover {
+    transform: scale(1.03);
+  }
+  
+  .primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+  }
+  
+  .primary:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  }
+  
+  .gray {
+    background: #e5e7eb;
+    color: #374151;
+  }
+  
+  .gray:hover {
+    background: #d1d5db;
+  }
+  
+  /* ===== 图片（活动详情用） ===== */
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #ccc;
+  }
+  
+  /* ===== 提示文本 ===== */
+  #result, #content {
+    margin-top: 1.5em;
+    font-size: 1rem;
+  }
+  
+  /* ===== 响应式适配 ===== */
+  @media (max-width: 768px) {
+    body {
+      padding: 1em;
+    }
+  
+    .event-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .event-card img {
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    form {
+      padding: 1em;
+    }
+  
+    button, .btn {
+      width: 100%;
+      margin-top: 0.5em;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1, h2 {
+      font-size: 1.5rem;
+    }
+  
+    label {
+      font-size: 0.9rem;
+    }
+  
+    input, textarea, select {
+      font-size: 0.95rem;
+    }
+  
+    button, .btn {
+      font-size: 1rem;
+    }
+  }
+  
