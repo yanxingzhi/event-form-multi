@@ -1,43 +1,232 @@
-/* ===== 按钮 ===== */
-button, .btn {
-    display: inline-block;
-    padding: 1em 2.2em; /* 高度更高、宽度更宽 */
+/* Reset & 基础 */
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #f2f2f7;
+    color: #1c1c1e;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 1rem;
+  }
+  
+  /* 标题 */
+  h1, h2, h3 {
+    font-weight: 600;
+    margin-bottom: 0.5em;
+  }
+  
+  /* event-list 容器和卡片 */
+  #event-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  /* 卡片样式 */
+  .event-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease-in-out;
+  }
+  
+  .event-card:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  
+  .event-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .event-info {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .event-info h3 {
+    font-size: 1.25rem;
+    margin: 0 0 0.5em 0;
+  }
+  
+  .event-info p {
+    flex-grow: 1;
+    font-size: 1rem;
+    color: #3c3c4399;
+    margin-bottom: 1em;
+  }
+  
+  /* 按钮样式 */
+  button {
+    background-color: #007aff;
     border: none;
-    border-radius: var(--radius);
-    font-size: 1.15em;  /* 字体更大 */
-    font-weight: 600;   /* 加粗 */
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-  }
-  
-  button:hover, .btn:hover {
-    transform: scale(1.05);
-  }
-  
-  .primary {
-    background: var(--primary-color);
     color: white;
+    padding: 0.75em 1.2em;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    user-select: none;
+    outline-offset: 2px;
   }
   
-  .primary:hover {
-    background: var(--primary-dark);
+  button:focus {
+    outline: 2px solid #0051a8;
+    outline-offset: 3px;
   }
   
-  .gray {
-    background: #e5e7eb;
-    color: #374151;
+  button:hover {
+    background-color: #005ecb;
   }
   
-  .gray:hover {
-    background: #d1d5db;
+  button:active {
+    background-color: #0041a8;
   }
   
-  /* 手机端按钮全宽大号 */
-  @media (max-width: 768px) {
-    button, .btn {
+  /* 页面活动详情内容 */
+  #content {
+    background: #fff;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    max-width: 720px;
+    margin: 1rem auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  #content img {
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 1em 0;
+  }
+  
+  /* 状态和按钮容器 */
+  #status {
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    color: #555;
+  }
+  
+  #buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  /* #buttons里的按钮宽度自适应，移动端更大 */
+  #buttons button {
+    flex: 1 1 120px;
+    min-width: 120px;
+    padding: 0.9em 0;
+    font-size: 1.2rem;
+  }
+  
+  /* 报名表样式 */
+  form {
+    max-width: 480px;
+    margin: 1rem auto 3rem auto;
+    background: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  
+  label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+  }
+  
+  input, select, textarea {
+    margin-top: 0.3rem;
+    padding: 0.6em 0.8em;
+    font-size: 1rem;
+    border: 1.5px solid #ccc;
+    border-radius: 10px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 5px rgba(0,122,255,0.5);
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  button[type="submit"] {
+    align-self: stretch;
+    margin-top: 1rem;
+    background-color: #007aff;
+    padding: 1em 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 15px;
+  }
+  
+  /* 提示文字 */
+  #result {
+    max-width: 480px;
+    margin: 0 auto 2rem auto;
+    font-size: 1.1rem;
+    color: #444;
+    text-align: center;
+  }
+  
+  /* loading遮罩 */
+  #loadingMask {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  
+  /* 响应式调整 */
+  /* 移动端一列显示卡片，按钮更大 */
+  @media screen and (max-width: 600px) {
+    #event-list {
+      grid-template-columns: 1fr;
+    }
+  
+    #buttons {
+      flex-direction: column;
+    }
+  
+    #buttons button {
       width: 100%;
+      min-width: auto;
+    }
+  
+    form {
+      margin: 1rem 1rem 3rem 1rem;
+      padding: 1.2rem 1.2rem;
+    }
+  
+    button, button[type="submit"] {
+      font-size: 1.3rem;
       padding: 1.2em 0;
-      font-size: 1.2em;
+      border-radius: 20px;
     }
   }
   
