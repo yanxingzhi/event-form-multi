@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>活动详情</title>
+  <title>イベント詳細</title>
   <link rel="stylesheet" href="data/style.css">
 </head>
 <body>
@@ -17,16 +17,16 @@
       .then(events => {
         const evt = events.find(e => e.id === id)
         if (!evt) {
-          document.getElementById("content").innerText = "活动未找到"
+          document.getElementById("content").innerText = "イベントが見つかりません"
           return
         }
         document.getElementById("content").innerHTML = `
           <h1>${evt.title}</h1>
-          <img src="${evt.poster}" alt="活动海报">
+          <img src="${evt.poster}" alt="イベントポスター">
           <p style="text-align:left;margin-top:1em;">${evt.desc}</p>
           <div id="status"></div>
           <div id="buttons">
-            <button class="btn primary" onclick="goForm('${evt.id}')">我要参加</button>
+            <button class="btn primary" onclick="goForm('${evt.id}')">参加する</button>
             <button class="btn gray" onclick="alert('好的，您可随时重试')">考虑一下</button>
           </div>
         `
