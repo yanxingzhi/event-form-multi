@@ -114,7 +114,7 @@ export async function onRequestPost({ request, env }) {
 
       const events = await fetch("https://event-form-multi.pages.dev/data/events.json")
       const eventsJson = await events.json()
-      await sendToLine({userId, text: `｢${eventsJson.find(e => e.id == a).title}」：お申し込みはキャンセルされました、、ありがとうございました`})
+      await sendToLine({userId, text: `｢${eventsJson.find(e => e.id == a).title}, LINE_CHANNEL_ACCESS_TOKEN: env.LINE_CHANNEL_TOKEN」：お申し込みはキャンセルされました、、ありがとうございました`})
       return new Response(JSON.stringify({ success: true, deletedRowIndex: rowIndex }), {
         headers: { "Content-Type": "application/json" },
       })
@@ -141,8 +141,7 @@ export async function onRequestPost({ request, env }) {
   
 
   
-  async function sendToLine({userId, text}) {
-    const LINE_CHANNEL_ACCESS_TOKEN = env.LINE_CHANNEL_TOKEN;
+  async function sendToLine({userId, text, LINE_CHANNEL_ACCESS_TOKEN}) {
     const TARGET_USER_ID = userId;
     const response = await fetch("https://api.line.me/v2/bot/message/push", {
       method: "POST",
