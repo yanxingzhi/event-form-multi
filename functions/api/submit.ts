@@ -123,7 +123,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   async function sendToLine({userId, text}) {
-    const LINE_CHANNEL_ACCESS_TOKEN = "RSrukCgPiNBsVcRUBAKraUn/2g8sY9csIuNSnNGKtQ6DBk4kPnaulYvJaUoNiMaxY92sbWi3Nf0fLh8EO82wfsdzGSOTL+OTgO/p/hrLGSgw0KSzoKVqLLlgflBBCmheWme6SHkj01fsEfDSQj/QJgdB04t89/1O/w1cDnyilFU=";
+    const LINE_CHANNEL_ACCESS_TOKEN = env.LINE_CHANNEL_TOKEN;
     const TARGET_USER_ID = userId;
     const response = await fetch("https://api.line.me/v2/bot/message/push", {
       method: "POST",
