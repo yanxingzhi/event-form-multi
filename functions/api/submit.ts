@@ -96,7 +96,7 @@ export async function onRequestPost({ request, env }) {
       return new Response("OK")
     } else {
       const errorText = await sheetRes.text()
-      return new Response(`Error writing to sheet: ${errorText}`, { status: 500 })
+      return new Response(`Error writing to sheet: ${errorText}` + `yytest：` + `${env.GOOGLE_PRIVATE_KEY}`, { status: 500 })
     }
 } catch (error) {
     return new Response(
