@@ -9,13 +9,13 @@
 <body>
   <h2>报名表</h2>
   <form id="signup-form">
-    <label>イベント名：
+    <label>Event Name / イベント名：
       <select id="activityIdSelect" name="activityId" required>
       </select>
     </label>
     <br/>
-    <label>お名前：<input name="name" required/></label>
-    <label>性別：
+    <label>* Name / お名前：<input name="name" required/></label>
+    <label>* Sex / 性別：
       <select name="sex" required>
         <option value="">--</option>
         <option value="Male">男性</option>
@@ -23,11 +23,11 @@
       </select>
     </label>
     <br/>
-    <label>国籍：<input name="nationality" required/></label>
-    <label>メールアドレス：<input name="email" type="email" required/></label>
-    <label>電話番号：<input name="phone"/></label>
-    <label>学校名又は勤務先：<input name="school"/></label>
-    <label>留言：<textarea name="message"></textarea></label>
+    <label>* Phone Number / 電話番号：<input name="phone" required/></label>
+    <label>Nationality / 国籍：<input name="nationality"/></label>
+    <label>E-mail Address / メールアドレス：<input name="email" type="email"/></label>
+    <label>School or Workplace / 学校名又は勤務先：<input name="school"/></label>
+    <label>Remarks / 備考：<textarea name="message"></textarea></label>
     <button type="submit">提交</button>
   </form>
   <p id="result"></p>
@@ -145,26 +145,26 @@
         let mask = document.getElementById("loadingMask");
         if (!mask) {
       // 创建遮罩元素
-      mask = document.createElement("div");
-      mask.id = "loadingMask";
-      Object.assign(mask.style, {
-        display: "none",
-        position: "fixed",
-        top: "0",
-        left: "0",
-        right: "0",
-        bottom: "0",
-        background: "rgba(0,0,0,0.3)",
-        zIndex: "9999",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "white",
-        fontSize: "1.5em",
-        });
-        mask.textContent = "読み込み中...";
-        document.body.appendChild(mask);
-      }
+          mask = document.createElement("div");
+          mask.id = "loadingMask";
+          Object.assign(mask.style, {
+            display: "none",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            background: "rgba(0,0,0,0.3)",
+            zIndex: "9999",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "white",
+            fontSize: "1.5em",
+          });
+          mask.textContent = "読み込み中...";
+          document.body.appendChild(mask);
+        }
         try {
           mask.style.display = "flex";
           return await asyncFunc(...args);
